@@ -26,8 +26,12 @@ export const fetchSinglePlayer = async (playerId) => {
     }
 };
 
-export const addNewPlayer = async (playerObj) => {
-
+export const addNewPlayer = async (playerObj, options) => {
+ 
+    const response = await fetch(APIURL, {
+        method: "POST",
+        body: JSON.stringify(playerData)
+    })
 };
 
 export const removePlayer = async (playerId) => {
