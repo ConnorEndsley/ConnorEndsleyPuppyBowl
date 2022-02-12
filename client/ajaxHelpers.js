@@ -49,5 +49,14 @@ export const addNewPlayer = async (playerObj) => {
   
 
 export const removePlayer = async (playerId) => {
-
-};
+    try{
+        const response = await fetch(`${APIURL}players/${playerId}`,{
+        method: "DELETE",
+    });
+    const result = await response.json();
+    } catch (err) {
+        console.error("an error has occurred", err)
+    }
+            // renderNewPlayerForm(players)
+    };
+    

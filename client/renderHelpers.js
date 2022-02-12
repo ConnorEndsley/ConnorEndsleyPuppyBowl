@@ -1,4 +1,4 @@
-import { addNewPlayer, fetchAllPlayers, fetchSinglePlayer } from './ajaxHelpers';
+import { addNewPlayer, fetchAllPlayers, fetchSinglePlayer, removePlayer } from './ajaxHelpers';
 
 const playerContainer = document.getElementById('all-players-container');
 const newPlayerFormContainer = document.getElementById('new-player-form');
@@ -22,6 +22,7 @@ export const renderAllPlayers = (playerList) => {
         </div>
         <img src="${pup.imageUrl}" alt="photo of ${pup.name} the puppy">
         <button class="detail-button" data-id=${pup.id}>See details</button>
+        <button class="delete-button"data-id=${pup.id}>Remove From Roster</button>
       </div>
     `;
     playerContainerHTML += pupHTML;
@@ -29,6 +30,19 @@ export const renderAllPlayers = (playerList) => {
 
   // After looping, fill the `playerContainer` div with the HTML we constructed above
   playerContainer.innerHTML = playerContainerHTML;
+
+  let deleteButton = [...document.getElementsByClassName("delete-button")];
+  for(let i = 0; i < deleteButton.length; i++){
+      const button = deleteButton[i];
+      button.addEventListener("click", async() => {
+        console.log(button);
+          await removePlayer(button.dataset.id);
+          const players = await fetchAllPlayers();
+          renderAllPlayers(players);
+
+      })
+    }
+
 
   // Now that the HTML for all players has been added to the DOM,
   // we want to grab those "See details" buttons on each player
@@ -40,9 +54,10 @@ export const renderAllPlayers = (playerList) => {
       let playerStats = await fetchSinglePlayer(button.dataset.id);
       console.log(playerStats);
       renderSinglePlayer(playerStats);
-    });
+    })
   }
 };
+
 
 export const renderSinglePlayer = (playerObj) => {
   if (!playerObj || !playerObj.id) {
